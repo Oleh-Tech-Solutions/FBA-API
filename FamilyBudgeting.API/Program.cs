@@ -1,6 +1,10 @@
+using FamilyBudgeting.Application.Services;
+using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Core;
+using FamilyBudgeting.Domain.Core.Constants;
 using FamilyBudgeting.Domain.Data.Users;
 using FamilyBudgeting.Domain.Interfaces;
+using FamilyBudgeting.Infrastructure.JwtProviders;
 using FamilyBudgeting.Infrastructure.Repositories;
 using FamilyBudgeting.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,6 +36,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies[JwtConstants.CockieName];
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -41,6 +54,9 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IUserLedgerRepository, UserLedgerRepository>();
 builder.Services.AddScoped<IUserLedgerRolesRepository, UserLedgerRolesRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 var app = builder.Build();
 

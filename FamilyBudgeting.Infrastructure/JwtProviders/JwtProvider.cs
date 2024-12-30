@@ -8,7 +8,7 @@ using System.Text;
 
 namespace FamilyBudgeting.Infrastructure.JwtProviders
 {
-    public class JwtProvider
+    public class JwtProvider : IJwtProvider
     {
         private readonly JwtOptions _jwtOptions;
 
