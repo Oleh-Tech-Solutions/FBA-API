@@ -1,4 +1,4 @@
-﻿using FamilyBudgeting.Domain.Interfaces;
+﻿using FamilyBudgeting.Domain.Data.UserLedgers;
 
 namespace FamilyBudgeting.Infrastructure.Repositories
 {

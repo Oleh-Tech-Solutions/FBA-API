@@ -1,5 +1,5 @@
 ﻿using FamilyBudgeting.Domain.Core;
-using FamilyBudgeting.Domain.Data;
+using FamilyBudgeting.Domain.Data.Users;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

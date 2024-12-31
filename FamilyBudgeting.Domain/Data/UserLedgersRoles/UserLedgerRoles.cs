@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FamilyBudgeting.Domain.Data
+namespace FamilyBudgeting.Domain.Data.UserLedgersRoles
 {
     public class UserLedgerRoles
     {

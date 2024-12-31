@@ -1,6 +1,6 @@
 ﻿using FamilyBudgeting.Application.DTOs.Requests;
 using FamilyBudgeting.Application.Services.Interfaces;
-using FamilyBudgeting.Domain.Core.Constants;
+using FamilyBudgeting.Domain.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilyBudgeting.API.Controllers
@@ -10,22 +10,34 @@ namespace FamilyBudgeting.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly HttpContext _httpContext;
 
-        public AuthController(IAuthService authService, HttpContext httpContext)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _httpContext = httpContext;
         }
 
         [HttpPost]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            var token = await _authService.Login(request.Email, request.Password);
+            int userId = await _authService.RegisterAsync(request.FirstName, 
+                request.LastName, request.Email, request.Password);
 
-            _httpContext.Response.Cookies.Append(JwtConstants.CockieName, token);
+            if (userId <= 0) 
+            {
+                return BadRequest("Error occured during creating a user");
+            }
 
-            return Ok(token);
+            return Ok(userId);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            var token = await _authService.LoginAsync(request.Email, request.Password);
+
+            HttpContext.Response.Cookies.Append(AppConstants.JwtCockieName, token);
+
+            return Ok();
         }
     }
 }

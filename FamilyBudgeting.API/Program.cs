@@ -1,9 +1,13 @@
+using FamilyBudgeting.Application.Configuration;
 using FamilyBudgeting.Application.Services;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Core;
-using FamilyBudgeting.Domain.Core.Constants;
+using FamilyBudgeting.Domain.Data.Ledgers;
+using FamilyBudgeting.Domain.Data.Transactions;
+using FamilyBudgeting.Domain.Data.UserLedgers;
+using FamilyBudgeting.Domain.Data.UserLedgersRoles;
 using FamilyBudgeting.Domain.Data.Users;
-using FamilyBudgeting.Domain.Interfaces;
+using FamilyBudgeting.Infrastructure.Context;
 using FamilyBudgeting.Infrastructure.JwtProviders;
 using FamilyBudgeting.Infrastructure.Repositories;
 using FamilyBudgeting.Infrastructure.Utilities;
@@ -24,7 +28,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString(AppConstants.DBConnStringName)
+    ?? throw new InvalidOperationException($"Connection string {AppConstants.DBConnStringName} not found.");
+
+builder.Services.AddScoped<ISqlConnectionFactory>(x => new SqlConnectionFactory(connectionString));
+
 var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
@@ -41,7 +51,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             OnMessageReceived = context =>
             {
-                context.Token = context.Request.Cookies[JwtConstants.CockieName];
+                context.Token = context.Request.Cookies[AppConstants.JwtCockieName];
                 return Task.CompletedTask;
             }
         };
@@ -57,6 +67,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-﻿namespace FamilyBudgeting.Domain.Interfaces
+﻿namespace FamilyBudgeting.Domain.Data.UserLedgers
 {
     public interface IUserLedgerRepository
     {

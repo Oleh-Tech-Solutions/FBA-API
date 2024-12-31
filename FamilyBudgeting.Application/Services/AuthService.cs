@@ -1,4 +1,6 @@
-﻿using FamilyBudgeting.Application.Services.Interfaces;
+﻿using FamilyBudgeting.Application.Mappers;
+using FamilyBudgeting.Application.Services.Interfaces;
+using FamilyBudgeting.Domain.Data.Users;
 using FamilyBudgeting.Infrastructure.JwtProviders;
 using FamilyBudgeting.Infrastructure.Utilities;
 
@@ -18,14 +20,23 @@ namespace FamilyBudgeting.Application.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<string> Login(string email, string password) 
+        public async Task<int> RegisterAsync(string firstName, string lastName, string email, string password)
+        {
+            string hashedPassword = _passwordHasher.HashPassword(password);
+
+            var user = new User(firstName, lastName, email, password);
+
+            return await _userService.CreateUserAsync(user);
+        }
+
+        public async Task<string> LoginAsync(string email, string password) 
         { 
             var user = await _userService.GetUserByEmailAsync(email);
 
             bool isPasswordCorrect = _passwordHasher.VerifyPassword(
                 user.PasswordHash, _passwordHasher.HashPassword(password));
 
-            return _jwtProvider.GenerateToken(user);
+            return _jwtProvider.GenerateToken(UserMapper.ConvertDtoToDomain(user));
         }
     }
 }

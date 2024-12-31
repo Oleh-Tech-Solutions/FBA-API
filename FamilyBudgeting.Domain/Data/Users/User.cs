@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FamilyBudgeting.Domain.Data
+namespace FamilyBudgeting.Domain.Data.Users
 {
     public class User : BaseEntity
     {

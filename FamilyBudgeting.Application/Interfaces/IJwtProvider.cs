@@ -1,4 +1,4 @@
-﻿using FamilyBudgeting.Domain.Data;
+﻿using FamilyBudgeting.Domain.Data.Users;
 
 namespace FamilyBudgeting.Infrastructure.JwtProviders
 {
