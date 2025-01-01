@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FamilyBudgeting.Domain.Data.UserLedgersRoles
+namespace FamilyBudgeting.Domain.Data.UserLedgerRoles
 {
-    public class UserLedgerRoles
+    public class UserLedgerRole
     {
         public int Id { get; set; }
         [Required]
         [MaxLength(255)]
         public string Title { get; set; }
 
-        public UserLedgerRoles(int id, string title)
+        public UserLedgerRole(int id, string title)
         {
             Id = id;
             Title = title;

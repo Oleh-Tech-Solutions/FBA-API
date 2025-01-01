@@ -4,6 +4,7 @@ using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Core;
 using FamilyBudgeting.Domain.Data.Ledgers;
 using FamilyBudgeting.Domain.Data.Transactions;
+using FamilyBudgeting.Domain.Data.UserLedgerRoles;
 using FamilyBudgeting.Domain.Data.UserLedgers;
 using FamilyBudgeting.Domain.Data.UserLedgersRoles;
 using FamilyBudgeting.Domain.Data.Users;
@@ -62,11 +63,11 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ILedgerRepository, LedgerRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IUserLedgerRepository, UserLedgerRepository>();
-builder.Services.AddScoped<IUserLedgerRolesRepository, UserLedgerRolesRepository>();
+builder.Services.AddScoped<IUserLedgerRoleRepository, UserLedgerRoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
