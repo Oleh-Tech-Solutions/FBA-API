@@ -2,5 +2,6 @@
 {
     public interface ITransactionRepository
     {
+        Task<int> CreateTransactionAsync(Transaction transaction);
     }
 }

@@ -19,6 +19,14 @@ namespace FamilyBudgeting.Application.Services
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
         {
+            string query = @"
+                INSERT INTO [Ledger]
+                DEFAULT VALUES; 
+                SELECT SCOPE_IDENTITY();
+                ";
+
+            QueryLogger.LogQuery(query, null);
+
             using (var conn = _connectionFactory.GetOpenConnection()) 
             {
                 return await conn.QueryFirstOrDefaultAsync<UserDto>(@"

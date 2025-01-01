@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using FamilyBudgeting.Application.Configuration;
 using FamilyBudgeting.Domain.Data.Ledgers;
+using FamilyBudgeting.Infrastructure.Utilities;
 
 namespace FamilyBudgeting.Infrastructure.Repositories
 {
@@ -15,13 +16,16 @@ namespace FamilyBudgeting.Infrastructure.Repositories
 
         public async Task<int> CreateLedgerAsync(bool closeConnection = false)
         {
-            var conn = _connectionFactory.GetOpenConnection();
-            int ledgerId = await conn.ExecuteScalarAsync<int>(@"
-                INSERT INTO [dbo].[Ledger]
+            string query = @"
+                INSERT INTO [Ledger]
                 DEFAULT VALUES; 
                 SELECT SCOPE_IDENTITY();
-                "
-            );
+                ";
+
+            QueryLogger.LogQuery(query, null);
+
+            var conn = _connectionFactory.GetOpenConnection();
+            int ledgerId = await conn.ExecuteScalarAsync<int>(query);
 
             if (closeConnection)
             {
