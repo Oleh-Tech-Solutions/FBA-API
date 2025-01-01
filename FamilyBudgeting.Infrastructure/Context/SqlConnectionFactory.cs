@@ -4,7 +4,7 @@ using System.Data;
 
 namespace FamilyBudgeting.Infrastructure.Context
 {
-    public class SqlConnectionFactory : ISqlConnectionFactory, IDisposable
+    public class SqlConnectionFactory : ISqlConnectionFactory
     {
         private readonly string _connectionString;
         private IDbConnection _connection;
@@ -26,32 +26,45 @@ namespace FamilyBudgeting.Infrastructure.Context
             return _connection;
         }
 
-        public IDbTransaction GetCurrentTransaction()
-        {
-            return _transaction;
-        }
-
         public IDbTransaction BeginTransaction()
         {
             if (_connection == null || _connection.State != ConnectionState.Open)
             {
                 GetOpenConnection();
             }
-            _transaction = _connection.BeginTransaction();
+
+            _transaction ??= _connection.BeginTransaction();
             return _transaction;
+        }
+
+        public IDbTransaction GetCurrentTransaction()
+        {
+            return _transaction;
+        }
+
+        public void CommitTransaction()
+        {
+            _transaction?.Commit();
+            _transaction = null;
+        }
+
+        public void RollbackTransaction()
+        {
+            _transaction?.Rollback();
+            _transaction = null;
         }
 
         public void Dispose()
         {
-            if (_transaction != null)
-            {
-                _transaction.Dispose();
-            }
+            _transaction?.Dispose();
+            _transaction = null;
 
             if (_connection != null && _connection.State == ConnectionState.Open)
             {
                 _connection.Dispose();
             }
+
+            _connection = null;
         }
     }
 }

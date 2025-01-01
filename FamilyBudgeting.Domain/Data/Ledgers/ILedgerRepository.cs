@@ -2,5 +2,6 @@
 {
     public interface ILedgerRepository
     {
+        Task<int> CreateLedgerAsync(bool closeConnection = false);
     }
 }
