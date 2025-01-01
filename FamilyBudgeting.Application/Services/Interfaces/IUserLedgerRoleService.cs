@@ -4,7 +4,7 @@ namespace FamilyBudgeting.Application.Services.Interfaces
 {
     public interface IUserLedgerRoleService
     {
-        Task<UserLedgerRoleDto> GetUserLedgerRolesAsync();
-        Task<UserLedgerRoleDto> GetUserLedgerRoleByTitleAsync(string title);
+        Task<UserLedgerRoleDto?> GetUserLedgerRolesAsync();
+        Task<UserLedgerRoleDto?> GetUserLedgerRoleByTitleAsync(string title);
     }
 }

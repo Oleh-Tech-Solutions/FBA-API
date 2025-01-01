@@ -41,6 +41,11 @@ namespace FamilyBudgeting.API.Controllers
 
             var role = await _ledgerRoleService.GetUserLedgerRoleByTitleAsync("Owner");
 
+            if (role is null)
+            {
+                return BadRequest("Ledger Role was not found");
+            }
+
             int ledgerId = await _ledgerService.CreateLedgerAsync(userId, role.Id);
 
             return Ok(ledgerId);

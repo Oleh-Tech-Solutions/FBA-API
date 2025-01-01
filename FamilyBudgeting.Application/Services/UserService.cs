@@ -3,6 +3,7 @@ using FamilyBudgeting.Application.Configuration;
 using FamilyBudgeting.Application.DTOs;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Data.Users;
+using FamilyBudgeting.Infrastructure.Utilities;
 
 namespace FamilyBudgeting.Application.Services
 {
@@ -17,22 +18,19 @@ namespace FamilyBudgeting.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<UserDto> GetUserByEmailAsync(string email)
+        public async Task<UserDto?> GetUserByEmailAsync(string email)
         {
             string query = @"
-                INSERT INTO [Ledger]
-                DEFAULT VALUES; 
-                SELECT SCOPE_IDENTITY();
+                SELECT TOP(1) Id, FirstName, LastName, Email, PasswordHash FROM [User]
+                WHERE Email = @Email
+                ORDER BY Id
                 ";
 
-            QueryLogger.LogQuery(query, null);
+            QueryLogger.LogQuery(query, email);
 
             using (var conn = _connectionFactory.GetOpenConnection()) 
             {
-                return await conn.QueryFirstOrDefaultAsync<UserDto>(@"
-                    SELECT TOP(1) Id, FirstName, LastName, Email, PasswordHash FROM [User]
-                    WHERE Email = @Email
-                    ",
+                return await conn.QueryFirstOrDefaultAsync<UserDto?>(query,
                     new
                     {
                         Email = email

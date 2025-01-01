@@ -33,6 +33,11 @@ namespace FamilyBudgeting.Application.Services
         { 
             var user = await _userService.GetUserByEmailAsync(email);
 
+            if (user is null)
+            {
+                throw new Exception($"User with email {email} not found");
+            }
+
             bool isPasswordCorrect = _passwordHasher.VerifyPassword(
                 user.PasswordHash, _passwordHasher.HashPassword(password));
 
