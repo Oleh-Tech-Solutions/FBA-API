@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FamilyBudgeting.Application.DTOs.Requests
+namespace FamilyBudgeting.Application.DTOs.Requests.Auths
 {
     public class RegisterRequest
     {

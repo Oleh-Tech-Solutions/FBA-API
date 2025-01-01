@@ -1,9 +1,13 @@
-﻿using FamilyBudgeting.Application.Services.Interfaces;
+﻿using FamilyBudgeting.Application.DTOs.Requests.Transactions;
+using FamilyBudgeting.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilyBudgeting.API.Controllers
 {
-    public class TransactionController : ControllerBase
+    [Route("[controller]/[action]")]
+    [Authorize]
+    public class TransactionController : BaseController
     {
         private readonly ITransactionService _transactionService;
 
@@ -12,8 +16,18 @@ namespace FamilyBudgeting.API.Controllers
             _transactionService = transactionService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> CreateTransaction(CreateTransactionRequest request)
         {
+            int userId = GetUserIdFromToken();
+
+            int trId = await _transactionService.CreateTransactionAsync(userId, request.LedgerId, 
+                request.TransactionTypeId, request.Amount, request.Date, request.Note);
+
+            if (trId <= 0)
+            {
+                return BadRequest("Unexpected error occured during creatin transaction");
+            }
+
             return Ok();
         }
     }

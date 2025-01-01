@@ -1,13 +1,12 @@
-﻿using FamilyBudgeting.Application.DTOs.Requests;
+﻿using FamilyBudgeting.Application.DTOs.Requests.Auths;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilyBudgeting.API.Controllers
 {
-    [ApiController]
     [Route("[controller]/[action]")]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
 
