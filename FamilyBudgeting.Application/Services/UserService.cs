@@ -26,7 +26,7 @@ namespace FamilyBudgeting.Application.Services
                 ORDER BY Id
                 ";
 
-            QueryLogger.LogQuery(query, email);
+            QueryLogger.LogQuery(query, (object)email);
 
             using (var conn = _connectionFactory.GetOpenConnection()) 
             {

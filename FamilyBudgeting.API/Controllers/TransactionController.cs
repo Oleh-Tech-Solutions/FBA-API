@@ -16,6 +16,7 @@ namespace FamilyBudgeting.API.Controllers
             _transactionService = transactionService;
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateTransaction(CreateTransactionRequest request)
         {
             int userId = GetUserIdFromToken();

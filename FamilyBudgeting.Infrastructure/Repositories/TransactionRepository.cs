@@ -23,18 +23,14 @@ namespace FamilyBudgeting.Infrastructure.Repositories
                            ,[TransactionTypeId]
                            ,[Amount]
                            ,[Date]
-                           ,[Note]
-                           ,[CreatedAt]
-                           ,[UpdatedAt])
+                           ,[Note])
                      VALUES
                            (@AuthorId
                            ,@LedgerId
                            ,@TransactionTypeId
                            ,@Amount
-                           ,[@Date]
-                           ,[@Note]
-                           ,@CreatedAt
-                           ,@UpdatedAt);
+                           ,@Date
+                           ,@Note);
                     SELECT SCOPE_IDENTITY();
                     ";
 
@@ -50,9 +46,7 @@ namespace FamilyBudgeting.Infrastructure.Repositories
                         TransactionTypeId = transaction.TransactionTypeId,
                         Amount = transaction.Amount,
                         Date = transaction.Date,
-                        Note = transaction.Note,
-                        CreatedAt = transaction.CreatedAt,
-                        UpdatedAt = transaction.UpdatedAt,
+                        Note = transaction.Note
                     });
             }
         }
