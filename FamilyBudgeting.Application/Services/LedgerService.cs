@@ -11,11 +11,11 @@ namespace FamilyBudgeting.Application.Services
 
         public LedgerService(ILedgerRepository ledgerRepository, IUserLedgerRepository userLedgerRepository)
         {
-            _userLedgerRepository = userLedgerRepository;
+            _ledgerRepository = ledgerRepository;
             _userLedgerRepository = userLedgerRepository;
         }
 
-        public async Task CreateLedger(int userId)
+        public async Task<int> CreateLedgerAsync(int userId, int roleId)
         {
             int ledgerId = await _ledgerRepository.CreateLedgerAsync();
 
@@ -24,7 +24,7 @@ namespace FamilyBudgeting.Application.Services
                 throw new Exception("Unexpected error during creating Ledger");
             }
 
-            var userLedger = new UserLedger(userId, 1, ledgerId);
+            var userLedger = new UserLedger(userId, roleId, ledgerId);
 
             int userLedgerId = await _userLedgerRepository.CreateUserLedgerAsync(userLedger);
 
@@ -32,6 +32,8 @@ namespace FamilyBudgeting.Application.Services
             {
                 throw new Exception("Unexpected error during creating User-Ledger");
             }
+
+            return userLedgerId;
         }
     }
 }

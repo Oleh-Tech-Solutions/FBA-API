@@ -20,7 +20,7 @@ namespace FamilyBudgeting.Infrastructure.Repositories
                 INSERT INTO [dbo].[UserLedger]
                        ([UserId], [LedgerId] ,[RoleId])
                  VALUES
-                       (@UserId, @LedgeerId, @RoleId)
+                       (@UserId, @LedgerId, @RoleId)
                 SELECT SCOPE_IDENTITY();
                 ", 
                 new

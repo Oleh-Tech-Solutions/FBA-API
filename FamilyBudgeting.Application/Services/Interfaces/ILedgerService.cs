@@ -2,5 +2,6 @@
 {
     public interface ILedgerService
     {
+        Task<int> CreateLedgerAsync(int userId, int roleId);
     }
 }

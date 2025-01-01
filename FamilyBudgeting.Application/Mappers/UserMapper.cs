@@ -7,12 +7,12 @@ namespace FamilyBudgeting.Application.Mappers
     {
         public static User ConvertDtoToDomain(UserDto userDto)
         {
-            return new User(userDto.FirstName, userDto.LastName, userDto.Email, userDto.PasswordHash);
+            return new User(userDto.FirstName, userDto.LastName, userDto.Email, userDto.PasswordHash) { Id = userDto.Id };
         }
 
         public static IEnumerable<User> ConvertDtoToDomains(IEnumerable<UserDto> userDtos)
         {
-            return userDtos.Select(x => new User(x.FirstName, x.LastName, x.Email, x.PasswordHash));
+            return userDtos.Select(x => new User(x.FirstName, x.LastName, x.Email, x.PasswordHash) { Id = x.Id });
         }
 
         public static UserDto ConvertDomainToDto(User user)

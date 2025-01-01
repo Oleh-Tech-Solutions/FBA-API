@@ -25,7 +25,7 @@ namespace FamilyBudgeting.Infrastructure.JwtProviders
 
             var claims = new List<Claim>
             {
-                new Claim("userId", user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

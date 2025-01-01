@@ -6,7 +6,6 @@ using FamilyBudgeting.Domain.Data.Ledgers;
 using FamilyBudgeting.Domain.Data.Transactions;
 using FamilyBudgeting.Domain.Data.UserLedgerRoles;
 using FamilyBudgeting.Domain.Data.UserLedgers;
-using FamilyBudgeting.Domain.Data.UserLedgersRoles;
 using FamilyBudgeting.Domain.Data.Users;
 using FamilyBudgeting.Infrastructure.Context;
 using FamilyBudgeting.Infrastructure.JwtProviders;
@@ -39,6 +38,7 @@ var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOpt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
+        options.MapInboundClaims = false; // Disable claim mapping
         options.TokenValidationParameters = new()
         {
             ValidateIssuer = false,
@@ -69,6 +69,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserLedgerRoleService, UserLedgerRoleService>();
+builder.Services.AddScoped<ILedgerService, LedgerService>();
 
 var app = builder.Build();
 
