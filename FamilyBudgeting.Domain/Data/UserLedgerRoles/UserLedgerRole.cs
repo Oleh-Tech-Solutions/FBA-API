@@ -6,7 +6,7 @@ namespace FamilyBudgeting.Domain.Data.UserLedgerRoles
     {
         public int Id { get; set; }
         [Required]
-        [MaxLength(255)]
+        [MaxLength(100)]
         public string Title { get; set; }
 
         public UserLedgerRole(int id, string title)

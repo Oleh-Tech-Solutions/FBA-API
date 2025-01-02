@@ -17,7 +17,7 @@ namespace FamilyBudgeting.Infrastructure.Repositories
         public async Task<int> CreateTransactionAsync(Transaction transaction)
         {
             string query = @"
-                    INSERT INTO [dbo].[Transaction]
+                    INSERT INTO [Transaction]
                            ([AuthorId]
                            ,[LedgerId]
                            ,[TransactionTypeId]
