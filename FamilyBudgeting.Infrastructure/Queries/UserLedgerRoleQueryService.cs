@@ -15,7 +15,7 @@ namespace FamilyBudgeting.Infrastructure.Queries
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<UserLedgerRoleDto?> GetUserLedgerRolesAsync()
+        public async Task<IEnumerable<UserLedgerRoleDto>> GetUserLedgerRolesAsync()
         {
             string query = @"
                 SELECT Id, Title
@@ -27,7 +27,7 @@ namespace FamilyBudgeting.Infrastructure.Queries
 
             using (var conn = _connectionFactory.GetOpenConnection())
             {
-                return await conn.QueryFirstOrDefaultAsync<UserLedgerRoleDto?>(query);
+                return await conn.QueryAsync<UserLedgerRoleDto>(query);
             }
         }
 

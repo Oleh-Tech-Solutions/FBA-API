@@ -1,4 +1,5 @@
-﻿using FamilyBudgeting.Application.Services.Interfaces;
+﻿using Ardalis.Result;
+using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Data.Transactions;
 
 namespace FamilyBudgeting.Application.Services
@@ -12,13 +13,20 @@ namespace FamilyBudgeting.Application.Services
             _transactionRepository = transactionRepository;
         }
 
-        public async Task<int> CreateTransactionAsync(int authorId, int ledgerId, 
+        public async Task<Result<int>> CreateTransactionAsync(int authorId, int ledgerId, 
             int transactionTypeId, double amount, DateTime date, string? note)
         {
             var newTransaction = new Transaction(authorId, ledgerId, transactionTypeId, 
                 amount, date, note);
 
-            return await _transactionRepository.CreateTransactionAsync(newTransaction);
+            int trId = await _transactionRepository.CreateTransactionAsync(newTransaction);
+
+            if (trId <= 0) 
+            {
+                return Result.Error("We could not create transaction");
+            }
+
+            return Result.Success(trId);
         }
     }
 }

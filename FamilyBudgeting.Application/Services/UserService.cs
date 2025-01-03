@@ -1,4 +1,5 @@
-﻿using FamilyBudgeting.Application.DTOs;
+﻿using Ardalis.Result;
+using FamilyBudgeting.Application.DTOs;
 using FamilyBudgeting.Application.Interfaces;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Data.Users;
@@ -16,14 +17,28 @@ namespace FamilyBudgeting.Application.Services
             _userQueryService = userQueryService;
         }
 
-        public async Task<UserDto?> GetUserByEmailAsync(string email)
+        public async Task<Result<UserDto>> GetUserByEmailAsync(string email)
         {
-            return await _userQueryService.GetUserByEmailAsync(email);
+            var user = await _userQueryService.GetUserByEmailAsync(email);
+
+            if (user == null) 
+            {
+                return Result.Error($"There is no user with email: {email}");
+            }
+
+            return Result.Success(user);
         }
 
-        public async Task<int> CreateUserAsync(User user)
+        public async Task<Result<int>> CreateUserAsync(User user)
         {
-            return await _userRepository.CreateUserAsync(user);
+            int userId = await _userRepository.CreateUserAsync(user);
+
+            if (userId <= 0)
+            {
+                return Result.Error($"We could not create user with email {user.Email}");
+            }
+
+            return Result.Success(userId);
         }
     }
 }

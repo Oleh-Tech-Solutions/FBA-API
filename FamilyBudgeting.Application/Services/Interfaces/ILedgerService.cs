@@ -1,7 +1,9 @@
-﻿namespace FamilyBudgeting.Application.Services.Interfaces
+﻿using Ardalis.Result;
+
+namespace FamilyBudgeting.Application.Services.Interfaces
 {
     public interface ILedgerService
     {
-        Task<int> CreateLedgerAsync(int userId, int roleId);
+        Task<Result<int>> CreateLedgerAsync(int userId, int roleId);
     }
 }

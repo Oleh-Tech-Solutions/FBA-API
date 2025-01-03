@@ -22,16 +22,21 @@ namespace FamilyBudgeting.API.Controllers
         {
             int userId = GetUserIdFromToken();
 
-            var role = await _ledgerRoleService.GetUserLedgerRoleByTitleAsync("Owner");
+            var result = await _ledgerRoleService.GetUserLedgerRoleByTitleAsync("Owner");
 
-            if (role is null)
+            if (!result.IsSuccess)
             {
-                return BadRequest("Ledger Role was not found");
+                return BadRequest(string.Join(" ", result.Errors));
             }
 
-            int ledgerId = await _ledgerService.CreateLedgerAsync(userId, role.Id);
+            var result2 = await _ledgerService.CreateLedgerAsync(userId, result.Value.Id);
 
-            return Ok(ledgerId);
+            if (!result2.IsSuccess)
+            {
+                return BadRequest(string.Join(" ", result2.Errors));
+            }
+
+            return Ok(result2.Value);
         }
     }
 }

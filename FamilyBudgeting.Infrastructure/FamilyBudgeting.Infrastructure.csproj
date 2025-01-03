@@ -16,4 +16,12 @@
     <ProjectReference Include="..\FamilyBudgeting.Application\FamilyBudgeting.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Queries\Ledgers\" />
+    <Folder Include="Queries\Users\" />
+    <Folder Include="Queries\UserLedgers\" />
+    <Folder Include="Queries\UserLedgerRoles\" />
+    <Folder Include="Queries\Transactions\" />
+  </ItemGroup>
+
 </Project>

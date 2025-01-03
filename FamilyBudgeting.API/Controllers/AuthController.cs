@@ -18,23 +18,28 @@ namespace FamilyBudgeting.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            int userId = await _authService.RegisterAsync(request.FirstName, 
+            var result = await _authService.RegisterAsync(request.FirstName, 
                 request.LastName, request.Email, request.Password);
 
-            if (userId <= 0) 
+            if (!result.IsSuccess) 
             {
-                return BadRequest("Error occured during creating a user");
+                return BadRequest(string.Join(" ", result.Errors));
             }
 
-            return Ok(userId);
+            return Ok(result.Value);
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var token = await _authService.LoginAsync(request.Email, request.Password);
+            var result = await _authService.LoginAsync(request.Email, request.Password);
 
-            HttpContext.Response.Cookies.Append(AppConstants.JwtCockieName, token);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(string.Join(" ", result.Errors));
+            }
+
+            HttpContext.Response.Cookies.Append(AppConstants.JwtCockieName, result.Value);
 
             return Ok();
         }

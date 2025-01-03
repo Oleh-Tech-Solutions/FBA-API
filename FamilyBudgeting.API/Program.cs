@@ -1,4 +1,5 @@
 using FamilyBudgeting.Application.Configuration;
+using FamilyBudgeting.Application.Interfaces;
 using FamilyBudgeting.Application.Services;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Core;
@@ -9,6 +10,7 @@ using FamilyBudgeting.Domain.Data.UserLedgers;
 using FamilyBudgeting.Domain.Data.Users;
 using FamilyBudgeting.Infrastructure.Context;
 using FamilyBudgeting.Infrastructure.JwtProviders;
+using FamilyBudgeting.Infrastructure.Queries;
 using FamilyBudgeting.Infrastructure.Repositories;
 using FamilyBudgeting.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -65,6 +67,9 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IUserLedgerRepository, UserLedgerRepository>();
 builder.Services.AddScoped<IUserLedgerRoleRepository, UserLedgerRoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IUserLedgerRoleQueryService, UserLedgerRoleQueryService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();

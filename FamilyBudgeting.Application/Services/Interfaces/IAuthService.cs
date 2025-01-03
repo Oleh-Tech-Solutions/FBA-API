@@ -1,8 +1,10 @@
-﻿namespace FamilyBudgeting.Application.Services.Interfaces
+﻿using Ardalis.Result;
+
+namespace FamilyBudgeting.Application.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<int> RegisterAsync(string firstName, string lastName, string email, string password);
-        Task<string> LoginAsync(string email, string password);
+        Task<Result<int>> RegisterAsync(string firstName, string lastName, string email, string password);
+        Task<Result<string>> LoginAsync(string email, string password);
     }
 }

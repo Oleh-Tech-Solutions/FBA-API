@@ -1,8 +1,10 @@
-﻿namespace FamilyBudgeting.Application.Interfaces
+﻿using FamilyBudgeting.Application.DTOs;
+
+namespace FamilyBudgeting.Application.Interfaces
 {
     public interface IUserLedgerRoleQueryService
     {
-        Task<UserLedgerRoleDto?> GetUserLedgerRolesAsync();
-        Task<UserLedgerRoleDto?> GetUserLedgerRoleByTitleAsync(string title);
+        Task<IEnumerable<UserLedgerRoleDto>> GetUserLedgerRolesAsync();
+        Task<UserLedgerRoleDto> GetUserLedgerRoleByTitleAsync(string title);
     }
 }

@@ -1,4 +1,5 @@
-﻿using FamilyBudgeting.Application.Services.Interfaces;
+﻿using Ardalis.Result;
+using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Data.Ledgers;
 using FamilyBudgeting.Domain.Data.UserLedgers;
 
@@ -15,14 +16,14 @@ namespace FamilyBudgeting.Application.Services
             _userLedgerRepository = userLedgerRepository;
         }
 
-        public async Task<int> CreateLedgerAsync(int userId, int roleId)
+        public async Task<Result<int>> CreateLedgerAsync(int userId, int roleId)
         {
             
             int ledgerId = await _ledgerRepository.CreateLedgerAsync();
 
             if (ledgerId <= 0)
             {
-                throw new Exception("Unexpected error during creating Ledger");
+                return Result.Error("We could not create Ledger");
             }
 
             var userLedger = new UserLedger(userId, roleId, ledgerId);
@@ -31,10 +32,10 @@ namespace FamilyBudgeting.Application.Services
 
             if (userLedgerId <= 0)
             {
-                throw new Exception("Unexpected error during creating User-Ledger");
+                return Result.Error("We could not create User-Ledger. Ledger was not created either");
             }
 
-            return userLedgerId;
+            return Result.Success(userLedgerId);
         }
     }
 }

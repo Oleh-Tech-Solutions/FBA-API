@@ -21,12 +21,12 @@ namespace FamilyBudgeting.API.Controllers
         {
             int userId = GetUserIdFromToken();
 
-            int trId = await _transactionService.CreateTransactionAsync(userId, request.LedgerId, 
+            var result = await _transactionService.CreateTransactionAsync(userId, request.LedgerId, 
                 request.TransactionTypeId, request.Amount, request.Date, request.Note);
 
-            if (trId <= 0)
+            if (!result.IsSuccess)
             {
-                return BadRequest("Unexpected error occured during creatin transaction");
+                return BadRequest(string.Join(" ", result.Errors));
             }
 
             return Ok();

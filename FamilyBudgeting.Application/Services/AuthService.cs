@@ -1,4 +1,5 @@
-﻿using FamilyBudgeting.Application.Mappers;
+﻿using Ardalis.Result;
+using FamilyBudgeting.Application.Mappers;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Data.Users;
 using FamilyBudgeting.Infrastructure.JwtProviders;
@@ -20,28 +21,35 @@ namespace FamilyBudgeting.Application.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<int> RegisterAsync(string firstName, string lastName, string email, string password)
+        public async Task<Result<int>> RegisterAsync(string firstName, string lastName, string email, string password)
         {
             string hashedPassword = _passwordHasher.HashPassword(password);
 
             var user = new User(firstName, lastName, email, password);
 
-            return await _userService.CreateUserAsync(user);
+            int userId = await _userService.CreateUserAsync(user);
+
+            if (userId <= 0 )
+            {
+                return Result.Error("We could not create User");
+            }
+
+            return Result.Success(userId);
         }
 
-        public async Task<string> LoginAsync(string email, string password) 
+        public async Task<Result<string>> LoginAsync(string email, string password) 
         { 
-            var user = await _userService.GetUserByEmailAsync(email);
+            var result = await _userService.GetUserByEmailAsync(email);
 
-            if (user is null)
+            if (!result.IsSuccess)
             {
-                throw new Exception($"User with email {email} not found");
+                return Result.Error(string.Join(" ", result.Errors));
             }
 
             bool isPasswordCorrect = _passwordHasher.VerifyPassword(
-                user.PasswordHash, _passwordHasher.HashPassword(password));
+                result.Value.PasswordHash, _passwordHasher.HashPassword(password));
 
-            return _jwtProvider.GenerateToken(UserMapper.ConvertDtoToDomain(user));
+            return Result.Success(_jwtProvider.GenerateToken(UserMapper.ConvertDtoToDomain(result.Value)));
         }
     }
 }
