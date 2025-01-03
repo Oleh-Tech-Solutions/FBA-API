@@ -17,6 +17,7 @@ namespace FamilyBudgeting.Application.Services
 
         public async Task<int> CreateLedgerAsync(int userId, int roleId)
         {
+            
             int ledgerId = await _ledgerRepository.CreateLedgerAsync();
 
             if (ledgerId <= 0)

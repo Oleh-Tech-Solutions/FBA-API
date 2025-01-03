@@ -1,41 +1,24 @@
-﻿using Dapper;
-using FamilyBudgeting.Application.Configuration;
-using FamilyBudgeting.Application.DTOs;
+﻿using FamilyBudgeting.Application.DTOs;
+using FamilyBudgeting.Application.Interfaces;
 using FamilyBudgeting.Application.Services.Interfaces;
 using FamilyBudgeting.Domain.Data.Users;
-using FamilyBudgeting.Infrastructure.Utilities;
 
 namespace FamilyBudgeting.Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly ISqlConnectionFactory _connectionFactory;
         private readonly IUserRepository _userRepository;
+        private readonly IUserQueryService _userQueryService;
 
-        public UserService(ISqlConnectionFactory connectionFactory, IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IUserQueryService userQueryService)
         {
-            _connectionFactory = connectionFactory;
             _userRepository = userRepository;
+            _userQueryService = userQueryService;
         }
 
         public async Task<UserDto?> GetUserByEmailAsync(string email)
         {
-            string query = @"
-                SELECT TOP(1) Id, FirstName, LastName, Email, PasswordHash FROM [User]
-                WHERE Email = @Email
-                ORDER BY Id
-                ";
-
-            QueryLogger.LogQuery(query, (object)email);
-
-            using (var conn = _connectionFactory.GetOpenConnection()) 
-            {
-                return await conn.QueryFirstOrDefaultAsync<UserDto?>(query,
-                    new
-                    {
-                        Email = email
-                    });
-            }
+            return await _userQueryService.GetUserByEmailAsync(email);
         }
 
         public async Task<int> CreateUserAsync(User user)
