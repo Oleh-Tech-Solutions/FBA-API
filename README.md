@@ -1,2 +1,2 @@
 # FBA
- Familty Budgetting Application
+Family Budgeting Application
